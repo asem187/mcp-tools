@@ -1,0 +1,57 @@
+{
+  "name": "unified-voice-system-v2",
+  "version": "2.0.0",
+  "description": "Advanced voice assistant with distributed architecture for remote audio",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "setup": "node scripts/setup.js",
+    "test": "node scripts/test-connections.js"
+  },
+  "dependencies": {
+    "electron": "^25.0.0",
+    "electron-store": "^8.1.0",
+    "electron-updater": "^6.1.1",
+    "node-fetch": "^2.6.7",
+    "robotjs": "^0.6.0",
+    "ws": "^8.13.0",
+    "express": "^4.18.2",
+    "socket.io": "^4.5.4",
+    "langchain": "^0.1.30",
+    "@langchain/anthropic": "^0.1.0",
+    "@langchain/community": "^0.0.47",
+    "@langchain/openai": "^0.0.28",
+    "chromadb": "^1.5.11",
+    "uuid": "^9.0.0",
+    "dotenv": "^16.3.1",
+    "p-queue": "^6.6.2",
+    "node-record-lpcm16": "^1.0.1",
+    "speaker": "^0.5.4",
+    "wavefile": "^11.0.0",
+    "fluent-ffmpeg": "^2.1.2"
+  },
+  "devDependencies": {
+    "electron-builder": "^24.6.3"
+  },
+  "build": {
+    "appId": "com.asem187.voice-assistant",
+    "productName": "Voice Assistant Pro",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    }
+  }
+}
