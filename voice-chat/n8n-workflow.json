@@ -1,0 +1,143 @@
+{
+  "name": "Claude Voice Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "voice-chat",
+        "responseMode": "responseNode",
+        "options": {
+          "cors": {
+            "allowedOrigins": "*"
+          }
+        }
+      },
+      "id": "webhook-trigger",
+      "name": "Voice Input Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [250, 300],
+      "webhookId": "voice-assistant"
+    },
+    {
+      "parameters": {
+        "model": "claude-3-opus-20240229",
+        "messages": {
+          "messages": [
+            {
+              "role": "user",
+              "content": "={{ $json.message }}"
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 150,
+          "temperature": 0.7
+        }
+      },
+      "id": "claude-api",
+      "name": "Claude API",
+      "type": "n8n-nodes-base.anthropic",
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM/stream",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Accept",
+              "value": "audio/mpeg"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "={{ $json.content[0].text }}"
+            },
+            {
+              "name": "model_id",
+              "value": "eleven_turbo_v2"
+            },
+            {
+              "name": "voice_settings",
+              "value": "={\"stability\": 0.5, \"similarity_boost\": 0.5}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "elevenlabs-tts",
+      "name": "ElevenLabs TTS",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "mode": "responseNode",
+        "responseCode": 200,
+        "responseHeaders": {
+          "entries": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "responseData": "={{ JSON.stringify({ text: $node['claude-api'].json.content[0].text, audioUrl: 'data:audio/mpeg;base64,' + $node['elevenlabs-tts'].binary.data.data }) }}",
+        "options": {}
+      },
+      "id": "response",
+      "name": "Send Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Voice Input Webhook": {
+      "main": [
+        [
+          {
+            "node": "Claude API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claude API": {
+      "main": [
+        [
+          {
+            "node": "ElevenLabs TTS",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ElevenLabs TTS": {
+      "main": [
+        [
+          {
+            "node": "Send Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

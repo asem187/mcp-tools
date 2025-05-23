@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "docker": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "mcp/docker:latest"],
+      "env": {}
+    },
+    "github": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "mcp/github-mcp-server:latest"],
+      "env": {
+        "GITHUB_TOKEN": "ghp_YOUR_TOKEN_HERE"
+      }
+    },
+    "brave-search": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "mcp/brave-search:latest"],
+      "env": {
+        "BRAVE_API_KEY": "YOUR_BRAVE_API_KEY"
+      }
+    },
+    "puppeteer": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "-v", "/tmp:/tmp", "mcp/puppeteer:latest"],
+      "env": {}
+    }
+  }
+}
