@@ -1,0 +1,22 @@
+{
+  "name": "claude-unified-voice-system",
+  "version": "2.0.0",
+  "description": "Complete voice interface for Claude Desktop with conversation sync",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "setup": "npm install && node setup.js"
+  },
+  "dependencies": {
+    "electron": "^25.0.0",
+    "node-fetch": "^2.6.7",
+    "robotjs": "^0.6.0",
+    "electron-store": "^8.1.0",
+    "ws": "^8.13.0"
+  },
+  "devDependencies": {
+    "electron-builder": "^24.0.0"
+  }
+}
