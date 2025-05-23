@@ -1,0 +1,14 @@
+{
+  "name": "claude-voice-assistant",
+  "version": "1.0.0",
+  "description": "Standalone voice assistant for Claude",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "install-deps": "npm install electron node-fetch@2"
+  },
+  "dependencies": {
+    "electron": "^25.0.0",
+    "node-fetch": "^2.6.7"
+  }
+}
